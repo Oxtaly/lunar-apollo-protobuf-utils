@@ -11,7 +11,7 @@
         "bundle-protos": "node ./dist/scripts/bundle-protos",
         "setup": "node ./dist/scripts/setup"
     },
-    "keywords": [],
+    "keywords": ["lunar", "apollo", "protobuf", ".proto", "lunar:apollo", "proto", "decoder", "encoder"],
     "author": "@Oxtaly",
     "license": "GPLv3",
     "description": "A javascript based lunar apollo protobufs decoder/encoder",
