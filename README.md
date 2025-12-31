@@ -5,7 +5,10 @@
 ## Installation
 
 ```bash
-git clone git+https://github.com/Oxtaly/lunar-apollo-protobuf-utils.git && cd ./lunar-apollo-protobuf-utils && npm i && npx tsc
+git clone https://github.com/Oxtaly/lunar-apollo-protobuf-utils.git
+cd ./lunar-apollo-protobuf-utils
+npm i
+npx tsc
 ```
 
 ## Usage:
@@ -18,7 +21,10 @@ npm run setup
 
 ### Then, you can just import it as you would in any project like so:
 ```js
+// in CommonJS
 const { LunarProtoUtils } = require('lunar-apollo-protobuf-utils');
+// or in ESM
+import { LunarProtoUtils } from 'lunar-apollo-protobuf-utils'; 
 
 /** 
  * @type {Buffer} Buffer containing a full lunarclient.apollo message
@@ -43,7 +49,7 @@ if(decoded['@name'] === 'PlayerHandshakeMessage') {
     sendLunarApolloMessageToClient(LunarProtoUtils.encodeMessage(message));
 }
 ```
-...or in typescript/ESM
+...or in typescript
 ```ts
 import { LunarProtoUtils } from 'lunar-apollo-protobuf-utils'; 
 
@@ -70,6 +76,69 @@ if(decoded['@name'] === 'PlayerHandshakeMessage') {
     sendLunarApolloMessageToClient(LunarProtoUtils.encodeMessage(message));
 };
 ```
+
+---
+
+### There are two main ways of using this library to create/verify the same message, consider this:
+
+```ts
+import type { LunarProtoMessage, LunarProtoMessageClassByName } from "lunar-apollo-protobuf-utils";
+import { LunarProtoUtils } from "lunar-apollo-protobuf-utils";
+
+// Just calling `LunarProtoMessage.lookupType(message['@name'])` would do the same
+// thing in this specific case but this is to demonstrate using the exported types
+function getInstancingType<T extends LunarProtoMessage>(message: T): LunarProtoMessageClassByName<T['@name']> {
+    const messageClass = LunarProtoUtils.lookupType(message['@name']);
+    return messageClass as LunarProtoMessageClassByName<T['@name']>;
+};
+
+// * An already decoded message or created message
+const myMessage: LunarProtoMessage = null; 
+
+const messageClass = getInstancingType(myMessage);
+
+// Creating a new message
+const newMessage = messageClass.create({ /** */ });
+// Which could also be written as this
+const newMessage = LunarProtoUtils.create(myMessage['@name'], { /** */ });
+
+// Though with `messageClass`, you can follow up calls without having to supply the type name again
+const errorMessage = messageClass.verify(newMessage);
+// ...instead off
+const errorMessage = LunarProtoUtils.verify(myMessage['@name'], newMessage);
+
+if(errorMessage) {
+    console.error('newMessage is invalid!', errorMessage);
+}
+```
+...or in CommonJS using jsdoc:
+```js
+const { LunarProtoUtils } = require("lunar-apollo-protobuf-utils");
+
+/**
+ * @typedef {import('lunar-apollo-protobuf-utils').LunarProtoMessage} LunarProtoMessage
+*/
+/**
+ * @template {import("lunar-apollo-protobuf-utils").LunarProtoMessageName} T
+ * @typedef {import('lunar-apollo-protobuf-utils').LunarProtoMessageClassByName<T>} LunarProtoMessageClassByName
+ */
+
+/**
+ * @template {LunarProtoMessage} T
+ * @param {T} message 
+ * @returns {LunarProtoMessageClassByName<T['@name']>}
+ */
+function getInstancingType(message) {
+    const messageClass = LunarProtoUtils.lookupType(message['@name']);
+    return /** @type {LunarProtoMessageClassByName<T['@name']>} */ (messageClass);
+};
+
+// ...
+// The rest is similar
+// ...
+```
+
+---
 
 ## Additional thanks
 
