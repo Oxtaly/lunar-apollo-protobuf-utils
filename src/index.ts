@@ -103,7 +103,8 @@ export class LunarProtoUtils {
         const cached = this.typeClassesCacheByName.get(typeName);
         if(cached)
             return cached as LunarProtoTypeClassExports[T];
-        throw new Error(`Message '${typeName}' not found in cache!`);
+        // * .toString() necessary to build without setup
+        throw new Error(`Message '${typeName.toString()}' not found in cache!`);
     }
 
     /**
@@ -205,7 +206,7 @@ export class LunarProtoUtils {
      */
     static create<T extends LunarProtoTypeClassName>(typeName: T, ...args: Parameters<LunarProtoTypeClassExports[T]['create']>): ReturnType<LunarProtoTypeClassExports[T]['create']> {
         const messageClass = this.lookupTypeByName(typeName);
-        ///@ts-expect-error - This is valid, not sure how to fix this;
+        ///@ts-ignore - This is valid, not sure how to fix this;
         return messageClass.create(...args);
     }
     
@@ -214,7 +215,7 @@ export class LunarProtoUtils {
      */
     static verify<T extends LunarProtoMessageName>(typeName: T, ...args: Parameters<LunarProtoTypeClassExports[T]['verify']>): ReturnType<LunarProtoTypeClassExports[T]['verify']> {
         const messageClass = this.lookupType(typeName);
-        ///@ts-expect-error - This is valid, not sure how to fix this;
+        ///@ts-ignore - This is valid, not sure how to fix this;
         return messageClass.verify(...args);
     }
 }

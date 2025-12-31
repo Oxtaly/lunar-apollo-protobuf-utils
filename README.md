@@ -1,22 +1,14 @@
 # lunar-apollo-protobuf
 
-## Node.js based protobuf encoder/decoder using protobufjs
+## Node.js protobufjs based encoder/decoder for [Lunar Client](https://lunarclient.dev/) [apollo messages](https://lunarclient.dev/apollo/internals/protocol-buffers)
+
+
+- Uses proto files from https://buf.build/lunarclient/apollo
 
 ## Installation
 
 ```bash
-git clone https://github.com/Oxtaly/lunar-apollo-protobuf.git
-cd ./lunar-apollo-protobuf
-npm i
-npx tsc
-```
-
-## Usage:
-
-### First, download and compile the .proto files from https://buf.build/lunarclient/apollo into a bundle using the "setup" script
-
-```bash
-npm run setup
+npm i lunar-apollo-protobuf
 ```
 
 ### Then, you can just import it as you would in any project like so:
@@ -136,6 +128,23 @@ function getInstancingType(message) {
 // ...
 // The rest is similar
 // ...
+```
+
+---
+
+## Building from source
+
+```bash
+git clone https://github.com/Oxtaly/lunar-apollo-protobuf.git
+cd ./lunar-apollo-protobuf
+npm i
+npx tsc
+```
+
+#### Then run the setup script to download the .proto files and automatically bundle them
+
+```bash
+npm run setup
 ```
 
 ---

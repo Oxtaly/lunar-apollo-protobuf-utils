@@ -1,16 +1,28 @@
 {
     "name": "lunar-apollo-protobuf",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "main": "./dist/index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "npx tcs",
+        "prebuild": "node -e \"try { fs.rmSync(path.join(path.resolve(), './dist'), { force: true, recursive: true }) } catch(_) {}\"",
+        "build": "npx tsc",
         "dev": "npx tsc --watch",
         "download-protos": "node ./dist/scripts/download-protos",
         "rewrite-relative-imports": "node ./dist/scripts/rewrite-relative-imports",
         "bundle-protos": "node ./dist/scripts/bundle-protos",
-        "setup": "node ./dist/scripts/setup"
+        "setup": "node ./dist/scripts/setup",
+        "rmbin": "node -e \"try { fs.rmSync(path.join(path.resolve(), './bin'), { force: true, recursive: true }) } catch(_) {}\"",
+        "prepublishOnly": "npm run rmbin && npm run build && npm run setup"
     },
+    "files": [
+        "./ProtoTypes.d.ts",
+        "./dist",
+        "./bin/proto.bundle.d.ts",
+        "./bin/proto.bundle.js",
+        "./LICENCE",
+        "./package.json",
+        "./README.md"
+    ],
     "keywords": ["lunar", "apollo", "protobuf", ".proto", "lunar:apollo", "proto", "decoder", "encoder"],
     "author": "@Oxtaly",
     "license": "GPLv3",
@@ -22,7 +34,10 @@
         "typescript": "^5.9.3"
     },
     "homepage": "https://github.com/Oxtaly/lunar-apollo-protobuf",
-    "repository": "git+https://github.com/Oxtaly/lunar-apollo-protobuf.git",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Oxtaly/lunar-apollo-protobuf.git"
+    },
     "dependencies": {
         "protobufjs": "^8.0.0",
         "tslib": "^2.8.1"
