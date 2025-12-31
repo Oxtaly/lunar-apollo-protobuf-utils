@@ -204,7 +204,7 @@ export class LunarProtoUtils {
      * Alias for LunarProtoUtils.lookupType(typeName).create()
      */
     static create<T extends LunarProtoTypeClassName>(typeName: T, ...args: Parameters<LunarProtoTypeClassExports[T]['create']>): ReturnType<LunarProtoTypeClassExports[T]['create']> {
-        const messageClass = this.lookupType(typeName);
+        const messageClass = this.lookupTypeByName(typeName);
         ///@ts-expect-error - This is valid, not sure how to fix this;
         return messageClass.create(...args);
     }
